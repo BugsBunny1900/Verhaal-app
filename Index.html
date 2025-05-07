@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kind van het Systeem</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+      color: #333;
+    }
+    #game-box {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .choice-button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px 15px;
+      border: none;
+      background: #0066cc;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .choice-button:hover {
+      background: #004999;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-box">
+    <h2>Kind van het Systeem</h2>
+    <div id="story-text"></div>
+    <div id="choices"></div>
+  </div>
+
+  <script>
+    const story = {
+      start: {
+        text: "Je bent 6 jaar oud. Het is vroeg in de ochtend. Je hoort stemmen in de woonkamer. De sfeer voelt gespannen. Opeens komt er iemand van Jeugdzorg binnen. Ze zeggen dat je met hen mee moet. Wat doe je?",
+        choices: [
+          { text: "Ik ga stilletjes mee", next: "stil_mee" },
+          { text: "Ik ren weg naar mijn kamer", next: "ren_kamer" }
+        ]
+      },
+      stil_mee: {
+        text: "Je stapt zonder iets te zeggen in de auto. Het raam beslaat langzaam terwijl je moeder je nastaart. Je voelt je leeg. Je komt aan bij een onbekend gebouw.",
+        choices: [
+          { text: "Vraag waar je bent", next: "vraag_plek" },
+          { text: "Blijf stil en kijk om je heen", next: "stil_kijk" }
+        ]
+      },
+      ren_kamer: {
+        text: "Je rent naar je kamer en verstopt je onder het bed. Maar een agent volgt je en tilt het dekbed op. Je wordt voorzichtig meegenomen. Tranen rollen over je wangen.",
+        choices: [
+          { text: "Schreeuw en spartel", next: "weerstand" },
+          { text: "Laat het gebeuren", next: "stil_mee" }
+        ]
+      },
+      vraag_plek: {
+        text: "Een vriendelijke vrouw zegt: 'Dit is een tijdelijke plek. Je mag hier blijven tot we iets vinden.' Het voelt als een gevangenis, maar je knikt.",
+        choices: []
+      },
+      stil_kijk: {
+        text: "De groep kinderen kijkt op als je binnenkomt. Sommigen glimlachen, anderen negeren je. Dit is je nieuwe thuis. Voor nu.",
+        choices: []
+      },
+      weerstand: {
+        text: "Je schreeuwt en vecht, maar ze blijven rustig. Uiteindelijk geef je het op. De auto rijdt weg, zonder dat je weet waarheen.",
+        choices: [
+          { text: "Staren uit het raam", next: "stil_kijk" }
+        ]
+      }
+    };
+
+    let currentScene = "start";
+
+    function renderScene() {
+      const scene = story[currentScene];
+      document.getElementById("story-text").innerText = scene.text;
+
+      const choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
+
+      scene.choices.forEach(choice => {
+        const button = document.createElement("button");
+        button.innerText = choice.text;
+        button.className = "choice-button";
+        button.onclick = () => {
+          currentScene = choice.next;
+          renderScene();
+        };
+        choicesDiv.appendChild(button);
+      });
+
+      if (scene.choices.length === 0) {
+        const endText = document.createElement("p");
+        endText.innerText = "Einde van hoofdstuk 1.";
+        choicesDiv.appendChild(endText);
+      }
+    }
+
+    renderScene();
+  </script>
+</body>
+</html>
